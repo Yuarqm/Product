@@ -21,29 +21,48 @@ namespace Product
     public partial class MainWindow : Window
     {
 
-        public List<Product> Products { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
-
+            
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(NameBox.Text) || string.IsNullOrEmpty(PriceBox.Text) || string.IsNullOrEmpty(QuanBox.Text))
+            if (string.IsNullOrEmpty(NameBox.Text) || string.IsNullOrEmpty(PriceBox.Text))
             {
                 MessageBox.Show("Пожалуйста, заполните все поля.");
                 return;
             }
             if (string.IsNullOrEmpty(QuanBox.Text))
             {
-                Products.Add(new Product(NameBox.Text, Convert.ToDouble(PriceBox.Text)));
+                MeinDataGrid.Items.Add(new Item(NameBox.Text, Convert.ToDouble(PriceBox.Text)));
             }
             else
             {
-                Products.Add(new Product(NameBox.Text, Convert.ToDouble(PriceBox.Text), Convert.ToInt32(QuanBox.Text)));
+                MeinDataGrid.Items.Add(new Item(NameBox.Text, Convert.ToDouble(PriceBox.Text), Convert.ToInt32(QuanBox.Text)));
             }
 
+        }
+
+        private void ShowButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MeinDataGrid.SelectedItem != null)
+            {
+                object selectedItem = MeinDataGrid.SelectedItem;
+
+                if (selectedItem is Item product) 
+                {
+                    (string name, double price, int quantity) = product; 
+                    MessageBox.Show($"Название: {name} Цена: {price} Количество: {quantity}");
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("Пожалуйста, выберите товар.");
+            }
         }
     }
 }

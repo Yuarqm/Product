@@ -5,61 +5,32 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
+using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace Product
 {
-    public class Product
+    public class Item
     {
-        string Name { get; set; }
-        double Price
-        {
-            get { return Price; }
-            set
-            {
-                if (value < 0)
-                {
-                    MessageBox.Show("Цена не может быть меньше 0");
-                }
-                else
-                {
-                    Price = value;
-                }
-            }
-        }
-        int Quantity
-        {
-            get { return Quantity; }
-            set
-            {
-                if (value < 0)
-                {
-                    MessageBox.Show("Кол-во не может быть меньше 0");
-                }
-                else
-                {
-                    Quantity = value;
-                }
-            }
-        }
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public int Quantity { get; set; } 
 
-        public Product(string name, double price, int quantity)
+        public Item(string name, double price, int quantity)
         {
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name), "Название не может быть пустым");
+            if (price < 0) throw new ArgumentException("Цена не может быть отрицательной", nameof(price));
+            if (quantity < 0) throw new ArgumentException("Количество не может быть отрицательным", nameof(quantity));
             Price = price;
             Quantity = quantity;
         }
-        public Product(string name, double price) : this(name, price, 1)
-        {
-            Name = name;
-            Price = price;
-
-        }
+        public Item(string name, double price) : this(name, price, 1) { }
         public void Deconstruct(out string name, out double price, out int quantity)
         {
             name = Name;
             price = Price;
             quantity = Quantity;
         }
-    }
 
+    }
 }
